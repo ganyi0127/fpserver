@@ -3,6 +3,29 @@ const code=require('./code.js');
 const resHandler=require('./resHandler.js');
 
 /**
+ * 上传或修改名称
+ */
+function updateUsername(req,res){
+
+    var body=req.body;
+    var uuid=body.uuid;
+    var username=body.username;
+    console.log('update username: %s',username);
+
+    //数据库操作
+    var conn=database.connectDB();
+
+    conn.connect(database.url,function(err,db){
+        if(err){
+            console.log('<updateUsername>connect err: %s',err);
+            db.close();
+        }else{
+
+        }
+    });
+}
+
+/**
  * 添加新排名
  */
 function addScore(req,res){
@@ -18,6 +41,7 @@ function addScore(req,res){
     conn.connect(database.url,function(err,db){
         if(err){
             console.log('connect err: %s',err);
+            db.close();
         }else{
             console.log('mongoDB数据库创建成功');
             let sbase=db.db('sonam');
@@ -33,6 +57,12 @@ function addScore(req,res){
                     let count=result.length;
                     console.log('查询用户 count: %s',count);
                     if(count>0){
+                        let oldScore=result[0].score;
+                        if(oldScore>=score){
+                            db.close();
+                            resHandler.send(res,code.CODE_LIST_LOWWERSCORE);
+                            return;
+                        }
                         //更新最高分
                         let _id=result[0]._id;
 
