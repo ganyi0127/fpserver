@@ -141,7 +141,7 @@ function getList(req,res){
                 }else{
                     resHandler.send(res,code.CODE_SECCESS,{
                         'result':result,
-                        'offset':offset,
+                        'offset':offset+limit,
                         'limit':limit
                     })
                 }
