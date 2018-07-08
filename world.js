@@ -110,12 +110,12 @@ function addScore(req,res){
  * 获取所有排名
  */
 function getList(req,res){
-    let body=req.body;
-    let limit=body.limit;
-    let offset=body.offset;
+    var body=req.body;
+    var limit=body.limit;
+    var offset=body.offset;
 
-    if(limit==undefined || limit=="" || limit==null){
-        limit=0;
+    if(limit==undefined || limit==0 || limit==null){
+        limit=20;
     }
     if(offset==undefined || offset=="" || offset==null){
         offset=0;
