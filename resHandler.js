@@ -2,8 +2,8 @@ function send(res,code,jsondata){
     var message;
     if(code==200){
         message='成功';
-    }else{
-        message='失败';
+    }else if(code==410){
+        message='无更多数据';
     }
     console.log('message: %s',message);
     res.send({

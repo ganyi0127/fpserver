@@ -15,3 +15,4 @@ exports.CODE_USER_LOGIN_PASSWORDERROR         =332;
  */
 exports.CODE_LIST_ERROR                       =400;
 exports.CODE_LIST_LOWWERSCORE                 =401;
+exports.CODE_LIST_OUTRANGEPAGES               =410;
