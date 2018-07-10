@@ -20,7 +20,40 @@ function updateUsername(req,res){
             console.log('<updateUsername>connect err: %s',err);
             db.close();
         }else{
+            console.log('<updateUsername>connect success');
 
+            let sbase=db.db('sonam');
+
+            //根据uuid查找对应数据
+            let where={'uuid':{$eq:uuid}};
+            sbase.collection('user').find(where).toArray(function(err,result){
+                if(err){
+                    console.log('<updateUsername>find err: %s',err);
+                    resHandler.send(res,code.CODE_USER_CONNECTERROR);
+                    db.close();
+                }else{
+                    let count=result.length;
+                    if(count>0){
+                        let where={'uuid':uuid};
+                        let update={$set:{'username':username}};
+                        sbase.collection('user').updateOne(where,update,function(err,result){
+                            if(err){
+                                console.log('<updateUsername>update error: %s',err);
+                                resHandler.send(res,code.CODE_USER_CONNECTERROR);
+                            }else{
+                                console.log('<updateUsername>update success');
+                                resHandler.send(res,code.CODE_SECCESS,{
+                                    username:username
+                                });
+                            }
+                            db.close();
+                        });
+                    }else{
+                        resHandler.send(res,code.CODE_USER_UPDATE_NODOCUMENT);
+                    }
+                    db.close();
+                }
+            });
         }
     });
 }
@@ -40,10 +73,10 @@ function addScore(req,res){
 
     conn.connect(database.url,function(err,db){
         if(err){
-            console.log('connect err: %s',err);
+            console.log('<addSocre>connect err: %s',err);
             db.close();
         }else{
-            console.log('mongoDB数据库创建成功');
+            console.log('<addSocre>connect success');
             let sbase=db.db('sonam');
 
             //根据uuid查找对应数据，否则插入
@@ -52,6 +85,7 @@ function addScore(req,res){
 
                 if(err){
                     console.log('find error: %s',err);
+                    resHandler.send(res,code.CODE_USER_CONNECTERROR);
                     db.close();
                 }else{
                     let count=result.length;
@@ -209,5 +243,6 @@ function getRanking(req,res){
 module.exports={
     getList:getList,
     addScore:addScore,
-    getRanking:getRanking
+    getRanking:getRanking,
+    updateUsername:updateUsername
 }

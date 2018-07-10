@@ -39,6 +39,10 @@ var url_map = {
     '获取排名':{
         'path':'/getranking',
         'respond':world.getRanking
+    },
+    '修改用户名':{
+        'path':'/updateusername',
+        'respond':world.updateUsername
     }
 }
 
