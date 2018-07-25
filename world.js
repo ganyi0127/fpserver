@@ -1,6 +1,7 @@
 const database=require('./database');
 const code=require('./code.js');
 const resHandler=require('./resHandler.js');
+const Integer = require('integer');
 
 /**
  * 上传或修改名称
@@ -148,10 +149,14 @@ function getList(req,res){
     var limit=body.limit;
     var offset=body.offset;
 
-    if(limit==undefined || limit==0 || limit==null){
+    console.log('\nlimit:%s\noffset:%s\n',limit,offset);
+
+    if(limit==undefined || limit==0){
+        console.log('empty limit');
         limit=20;
     }
-    if(offset==undefined || offset=="" || offset==null){
+    if(offset==undefined){
+        console.log('empty offset');
         offset=0;
     }
 
@@ -169,10 +174,12 @@ function getList(req,res){
             let where={'score':{$gt:0}};
             let sort={'score':-1};
             sBase.collection('user').ensureIndex(sort);
-            sBase.collection('user').find(where).skip(offset).limit(limit).sort(sort).toArray(function(err,result){
+            console.log('\nlimit:%s\noffset:%s\n',limit,offset);
+            sBase.collection('user').find(where).skip(parseInt(offset)).limit(parseInt(limit)).sort(sort).toArray(function(err,result){
                 if(err){
                     resHandler.send(res,code.CODE_USER_LOGIN_ERROR);
                 }else{
+                    console.log('<getList>find error:%s',err);
                     resHandler.send(res,code.CODE_SECCESS,{
                         'result':result,
                         'offset':offset+limit,

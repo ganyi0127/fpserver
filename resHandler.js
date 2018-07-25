@@ -6,6 +6,7 @@ function send(res,code,jsondata){
         message='无更多数据';
     }
     console.log('message: %s',message);
+    res.header("Access-Control-Allow-Origin","*");
     res.send({
         code:code,
         message:message,
